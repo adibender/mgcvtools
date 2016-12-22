@@ -5,7 +5,7 @@
 \alias{tidy_s}
 \title{Extract 1d smooth objects in tidy data format.}
 \usage{
-tidy_s(po, keep = c("x", "fit", "se", "xlab", "ylab"), se = TRUE)
+tidy_s(po, keep = c("x", "fit", "se", "xlab", "ylab"), ci = TRUE)
 
 tidy_re(po, keep = c("fit", "main", "xlab", "ylab"))
 }
@@ -13,6 +13,9 @@ tidy_re(po, keep = c("fit", "main", "xlab", "ylab"))
 \item{po}{A list of plot obects as returned from \code{\link[mgcvtools]{get_plotinfo}}.}
 
 \item{keep}{A vector of variables to keep.}
+
+\item{ci}{A logical value indicating whether confidence intervals should be 
+calculated and returned. Defaults to \code{TRUE}.}
 }
 \description{
 Extract 1d smooth objects in tidy data format.

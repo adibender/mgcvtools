@@ -9,6 +9,8 @@
 #' @param ... Further arguments passed to \code{\link[mgcv]{plot.gam}}
 #' @import mgcv
 #' @importFrom checkmate assert_class
+#' @importFrom grDevices png dev.off
+#' @importFrom graphics plot
 #' @export 
 get_plotinfo <- function(x, ...) {
 
@@ -16,7 +18,7 @@ get_plotinfo <- function(x, ...) {
 
 	tmp <- paste0(tempfile(), ".png")
 	png(tmp)
-	po <- plot(mod, page=1)
+	po <- plot(x, page=1, ...)
 	dev.off()
 	file.remove(tmp)
 
@@ -31,12 +33,14 @@ get_plotinfo <- function(x, ...) {
 #' 
 #' @param po A list of plot obects as returned from \code{\link[mgcvtools]{get_plotinfo}}.
 #' @param keep A vector of variables to keep. 
+#' @param ci A logical value indicating whether confidence intervals should be 
+#' calculated and returned. Defaults to \code{TRUE}.
 #' @importFrom dplyr bind_rows
 #' @export 
 tidy_s <- function(
 	po, 
 	keep = c("x", "fit", "se", "xlab", "ylab"), 
-	se = TRUE) {
+	ci = TRUE) {
 
 	# index of list elements that are 1d smooths and not random effects 
 	ind.1d <- vapply(
@@ -47,7 +51,7 @@ tidy_s <- function(
 	po <- lapply(po[ind.1d], "[", i=keep, drop=TRUE)
 	# use cbind.data.frame here, b/c as_data_frame does not work here 
 	po <- lapply(po, function(z) do.call(cbind.data.frame, c(z, stringsAsFactors=FALSE)))
-	if(se) {
+	if(ci) {
 		po <- lapply(po, function(z) {
 			z$low  = z$fit - z$se
 			z$high = z$fit + z$se
@@ -64,6 +68,7 @@ tidy_s <- function(
 #' 
 #' @inheritParams tidy_s
 #' @importFrom dplyr bind_rows
+#' @importFrom stats ppoints qnorm quantile
 #' @rdname tidy_s
 #' @export 
 tidy_re <- function(po, keep=c("fit", "main", "xlab", "ylab")) {
