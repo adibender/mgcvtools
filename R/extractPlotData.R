@@ -1,6 +1,4 @@
-
-
-#' Extract plot information of all smooths
+#' Extract plot information for all special model terms
 #' 
 #' Given a \code{mgcv} \code{\link[mgcv]{gamObject}}, returns the information 
 #' used for the default plots produced by \code{\link[mgcv]{plot.gam}}.
@@ -31,17 +29,19 @@ get_plotinfo <- function(x, ...) {
 
 #' Extract 1d smooth objects in tidy data format.
 #' 
-#' @param po A list of plot obects as returned from \code{\link[mgcvtools]{get_plotinfo}}.
+#' @inheritParams get_plotinfo
 #' @param keep A vector of variables to keep. 
 #' @param ci A logical value indicating whether confidence intervals should be 
 #' calculated and returned. Defaults to \code{TRUE}.
 #' @importFrom dplyr bind_rows
 #' @export 
-tidy_s <- function(
-	po, 
+tidy_smooth <- function(
+	x, 
 	keep = c("x", "fit", "se", "xlab", "ylab"), 
-	ci = TRUE) {
+	ci = TRUE, 
+	...) {
 
+	po <- get_plotinfo(x, ...)
 	# index of list elements that are 1d smooths and not random effects 
 	ind.1d <- vapply(
 		X         = po,
@@ -66,13 +66,14 @@ tidy_s <- function(
 
 #' Extract random effects objects in tidy data format.
 #' 
-#' @inheritParams tidy_s
+#' @inheritParams tidy_smooth
 #' @importFrom dplyr bind_rows
 #' @importFrom stats ppoints qnorm quantile
-#' @rdname tidy_s
+#' @rdname tidy_smooth
 #' @export 
-tidy_re <- function(po, keep=c("fit", "main", "xlab", "ylab")) {
+tidy_re <- function(x, keep=c("fit", "main", "xlab", "ylab"), ...) {
 
+	po <- get_plotinfo(x, ...)
 	ind.re <- vapply(
 		X         = po,
 		FUN       = function(z) !is.null(z$main) & z$xlab == "Gaussian quantiles",

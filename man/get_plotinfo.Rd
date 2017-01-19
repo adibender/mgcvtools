@@ -2,7 +2,7 @@
 % Please edit documentation in R/extractPlotData.R
 \name{get_plotinfo}
 \alias{get_plotinfo}
-\title{Extract plot information of all smooths}
+\title{Extract plot information for all special model terms}
 \usage{
 get_plotinfo(x, ...)
 }
