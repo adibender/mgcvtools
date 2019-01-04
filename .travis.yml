@@ -1,0 +1,30 @@
+language: r
+sudo: false
+cache: packages
+
+r:
+  - devel
+  - release
+
+r_github_packages:
+  - jimhester/covr
+  - thomasp85/patchwork
+  - adibender/mgcvtools
+
+# whitelist
+branches:
+  only:
+    - master
+
+after_success:
+  - Rscript -e 'covr::codecov(type="all", line_exclusions="R/zzz.R")'
+  # - Rscript -e 'pkgdown::build_site()'
+
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_PAT
+  keep-history: false
+  local-dir: docs
+  on:
+    branch: master

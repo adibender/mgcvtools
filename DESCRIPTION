@@ -1,18 +1,22 @@
 Package: mgcvtools
 Title: Utility functions for work with the mgcv package
-Version: 0.0.101
+Version: 0.0.2
 Authors@R: person("Andreas", "Bender", email = "bender.at.R@gmail.com", role = c("aut", "cre"))
-Description: Some utility functions for work with mgcv gam objects.
+Description: Flexible, intuitive and tidy workflow with generalized additive
+  mixed models estimated with R package mgcv.
 Depends:
     R (>= 3.3.1)
 Imports:
 		checkmate,
 		ggplot2,
+    lazyeval,
+    purrr,
 		tidyr,
 		dplyr,
-		mgcv
+		mgcv,
+    magrittr
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 5.0.1
+RoxygenNote: 6.1.1
 Suggests: testthat
